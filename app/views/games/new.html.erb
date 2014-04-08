@@ -1,0 +1,20 @@
+<h1>Welcome to Minesweeper</h1>
+
+<form method="POST" accept-charset='utf-8' action="games">
+  <label>Game width:
+    <input type="number" name="board_x" id="x-dim-input">
+  </label></br>
+
+  <label>Game height:
+    <input type="number" name="board_y" id="y-dim-input">
+  </label></br>
+
+  <label>Number of bombs:
+    <input type="number" name="num_bombs" id="x-dim-input">
+  </label></br>
+  
+  <input type="hidden" name"authenticity_token" value="<%=form_authenticity_token%>">
+
+  <input type="submit" value="Start Game &rarr;">
+</form>
+

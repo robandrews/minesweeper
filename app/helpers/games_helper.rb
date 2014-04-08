@@ -1,5 +1,5 @@
-module MinesweeperGame
-
+module GamesHelper
+  
   class Game
     attr_accessor :board
   
@@ -9,47 +9,60 @@ module MinesweeperGame
   
     def run
       @t1 = Time.now
-      puts "Welcome to Minesweeper!"
       @board.populate_board
-    
-
-      until won? || lost?
-        @board.print_board
-        input = prompt_user
-        if input[0] == "r"
-          @last_turn = @board.tiles[input[1].to_i][input[2].to_i].reveal
-        else
-          @board.tiles[input[1].to_i][input[2].to_i].flag
-        end
-      end
+      
     end
   
-    def prompt_user
-    
-      puts "Please enter move with the \'r\' prefix for reveal and the \'f\' prefix for flag."
-      puts "For example: f(2,3) to flag position 2,3 or r(3,4) to reveal position 3,4"
-      puts "The coordinate system starts a zero, from the top left"
-      puts "Enter the word \'save\' to save your game state to the directory"
-    
+  
+    def user_input
+      input = parse_input(input)
+      if input[0] == "r"
+        @last_turn = @board.tiles[input[1].to_i][input[2].to_i].reveal
+      else
+        @board.tiles[input[1].to_i][input[2].to_i].flag
+      end
+      @board.print_board
+      #need to check for win.
+    end
+    # def prompt_user
+    #     
+    #       puts "Please enter move with the \'r\' prefix for reveal and the \'f\' prefix for flag."
+    #       puts "For example: f(2,3) to flag position 2,3 or r(3,4) to reveal position 3,4"
+    #       puts "The coordinate system starts a zero, from the top left"
+    #       puts "Enter the word \'save\' to save your game state to the directory"
+    #     
+    #       begin
+    #         input = gets.chomp
+    #         parsed = input.scan(/\A([fr])\((\d),(\d)\)\z/)
+    #         if parsed.empty? && input.downcase != "save"
+    #           raise "Invalid input"
+    #         end
+    #       
+    #         save_game if input.downcase == "save"
+    #       rescue
+    #         puts "Sorry, invalid format.  Please try again with format: \'r(2,3)\'"
+    #         retry
+    #       end
+    #       parsed.flatten
+    #     end
+
+    def parse_input(input)
       begin
-        input = gets.chomp
+
         parsed = input.scan(/\A([fr])\((\d),(\d)\)\z/)
         if parsed.empty? && input.downcase != "save"
           raise "Invalid input"
         end
-      
-        save_game if input.downcase == "save"
+        
       rescue
         puts "Sorry, invalid format.  Please try again with format: \'r(2,3)\'"
         retry
       end
+      
       parsed.flatten
+      
     end
-  
-    def save_game
     
-    end
-
     def lost?
       if @last_turn == false
         puts "Game over :("
@@ -65,13 +78,6 @@ module MinesweeperGame
         puts "It took you #{Time.now - @t1} seconds to solve the puzzle"
         return true
       end
-    end
-  
-    def save_game
-      t = Time.now
-      f = File.open("#{t.month}-#{t.day}-#{t.year}_#{t.hour}-#{t.min}.mine", "w") do |line|
-        line.write(@board.to_yaml)
-      end 
     end
   
   end
@@ -160,42 +166,62 @@ module MinesweeperGame
       @contents = contents # || Array.new(horizontal, Array.new(vertical))
     end
   
-    #need to make a method that center justifies the strings, so they are formatted properly when
-    #we throw them into the draw_grid method.
+    # need to make a method that center justifies the strings, so they are formatted properly when
+    # we throw them into the draw_grid method.
+    # def draw_grid
+    #   print_cap
+    #   (0...@vertical).each do |vert_index|
+    #     (0..@v_size).each do |block_height|
+    #       (0...@horizontal).each do |horizontal_index|
+    #         if block_height == (@v_size/2)
+    #           print "|" + " "*(@h_size/2)
+    #           "#{print @contents[horizontal_index][vert_index]}|"
+    #           print " "*(@h_size/2-1)
+    #         else
+    #           print "|"; print " "*@h_size
+    #         end
+    #       end
+    #       print "|\n" 
+    #         
+    #     end
+    #     print_cap
+    #   end
+    # end
+    
     def draw_grid
+      @ret_str = ""
       print_cap
       (0...@vertical).each do |vert_index|
         (0..@v_size).each do |block_height|
           (0...@horizontal).each do |horizontal_index|
             if block_height == (@v_size/2)
-              print "|" + " "*(@h_size/2)
-              "#{print @contents[horizontal_index][vert_index]}|"
-              print " "*(@h_size/2-1)
+              @ret_str += "|" + " "*(@h_size/2)
+              @ret_str += "#{@contents[horizontal_index][vert_index]}|"
+              @ret_str += " "*(@h_size/2-1)
             else
-              print "|"; print " "*@h_size
+              @ret_str += "|"; 
+              @ret_str += " "*@h_size
             end
           end
-          print "|\n" 
-        
+          @ret_str += "|\n" 
+            
         end
         print_cap
       end
+      @ret_str
     end
-  
+    
     def size
       puts "This is a #{@horizontal} by #{@vertical} grid, (x,y)=(0,0) starts at upper left"
     end
-  
+      
     def print_cap
-      print "+"; @horizontal.times{print "-"*@h_size + "+"}; print "\n"
+      @ret_str += "+"
+      @horizontal.times{@ret_str += ("-"*@h_size + "+")}
+      @ret_str += "\n"
     end
   
   end
-  
-  
-  
-  
-  
   
   
   
@@ -248,7 +274,4 @@ module MinesweeperGame
       count
     end
   end
-  
-  
-  
 end
