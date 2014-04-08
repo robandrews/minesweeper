@@ -3,21 +3,30 @@ module GamesHelper
   class MinesweeperGame
     attr_accessor :board
   
-    def initialize(board_x, board_y, num_bombs)
-      @board = Board.new(board_x, board_y, num_bombs)
+    def initialize(options)
+      if options[:board]
+        @board = options[:board]
+      else
+        @board = Board.new(options[:board_x], options[:board_y], options[:num_bombs])
+      end
     end
-  
+    
     def run
       @t1 = Time.now
       @board.populate_board
     end
+ 
     
     def board_yaml
       @board.to_yaml
     end
   
-    def user_input
-      input = parse_input(input)
+    def user_input(input)
+      # input = parse_input(input)
+      # input = fix_offset(raw_input)
+      input.unshift("r")
+      
+      
       if input[0] == "r"
         @last_turn = @board.tiles[input[1].to_i][input[2].to_i].reveal
       else
@@ -26,6 +35,11 @@ module GamesHelper
       @board.print_board
       #need to check for win.
     end
+
+    # def fix_offset(raw)
+    #   raw.unshift("r")
+    #   raw[2] = raw[2]
+    # end
     # def prompt_user
     #     
     #       puts "Please enter move with the \'r\' prefix for reveal and the \'f\' prefix for flag."

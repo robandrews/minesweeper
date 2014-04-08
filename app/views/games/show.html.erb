@@ -1,8 +1,25 @@
-<%b = YAML.load(@game.board) %>
-<%b.tiles.each do |row|%>
+<%board = YAML.load(@game.board) %>
+<div class="board">
+<%board.tiles.each do |row|%>
   <div class="board-row">
     <%row.each do |tile|%>
-      <span class="tile" data-pos="<%=tile.position%>"><%=b.display_value(tile)%></span>
+      <span class="tile" data-pos="<%=tile.position%>"><%=board.display_value(tile)%></span>
     <%end%>
   </div>
 <%end%>
+</div>
+
+<script>
+$(
+  $("span.tile").click(function(e){
+    var position = $(e.target).data("pos");
+    $.ajax({
+      type:"PUT",
+      url:window.location.pathname,
+      data: {position: position.reverse()}
+    }).done(function(resp){
+      $(".board").html(resp);
+    })
+  })
+)
+</script>
