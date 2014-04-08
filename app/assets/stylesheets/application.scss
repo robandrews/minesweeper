@@ -11,3 +11,25 @@
  *= require_self
  *= require_tree .
  */
+
+
+div.board-row{
+  width:80%;
+  margin:0px auto;
+  background-color:#4658E8;
+  text-align:center;
+  padding-top:5px;
+  
+  
+  .tile{
+    padding:0px 15px;
+    border-style:solid;
+    margin-left:-5px;
+  }
+  
+  .tile:hover{
+    background-color:#CB0900;
+    cursor:pointer;
+  };
+  
+}

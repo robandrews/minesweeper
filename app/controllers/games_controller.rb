@@ -5,12 +5,13 @@ class GamesController < ApplicationController
   end
 
   def create
-    x_dim = params[:board_x].to_i
-    y_dim = params[:board_y].to_i
+    x = params[:board_x].to_i
+    y = params[:board_y].to_i
     bombs = params[:num_bombs].to_i
-    @game = Game.new(x_dim, y_dim, bombs)
-    @game.run
-    @grid = @game.board.print_board
+    instance = GamesHelper::MinesweeperGame.new(x, y, bombs)
+    instance.run
+    board = instance.board_yaml
+    @game = Game.create(board: board)
     render :show
   end
 end

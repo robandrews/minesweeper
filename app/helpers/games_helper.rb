@@ -1,6 +1,6 @@
 module GamesHelper
   
-  class Game
+  class MinesweeperGame
     attr_accessor :board
   
     def initialize(board_x, board_y, num_bombs)
@@ -10,9 +10,11 @@ module GamesHelper
     def run
       @t1 = Time.now
       @board.populate_board
-      
     end
-  
+    
+    def board_yaml
+      @board.to_yaml
+    end
   
     def user_input
       input = parse_input(input)
@@ -168,60 +170,70 @@ module GamesHelper
   
     # need to make a method that center justifies the strings, so they are formatted properly when
     # we throw them into the draw_grid method.
-    # def draw_grid
-    #   print_cap
-    #   (0...@vertical).each do |vert_index|
-    #     (0..@v_size).each do |block_height|
-    #       (0...@horizontal).each do |horizontal_index|
-    #         if block_height == (@v_size/2)
-    #           print "|" + " "*(@h_size/2)
-    #           "#{print @contents[horizontal_index][vert_index]}|"
-    #           print " "*(@h_size/2-1)
-    #         else
-    #           print "|"; print " "*@h_size
-    #         end
-    #       end
-    #       print "|\n" 
-    #         
-    #     end
-    #     print_cap
-    #   end
-    # end
-    
     def draw_grid
-      @ret_str = ""
       print_cap
       (0...@vertical).each do |vert_index|
         (0..@v_size).each do |block_height|
           (0...@horizontal).each do |horizontal_index|
             if block_height == (@v_size/2)
-              @ret_str += "|" + " "*(@h_size/2)
-              @ret_str += "#{@contents[horizontal_index][vert_index]}|"
-              @ret_str += " "*(@h_size/2-1)
+              print "|" + " "*(@h_size/2)
+              "#{print @contents[horizontal_index][vert_index]}|"
+              print " "*(@h_size/2-1)
             else
-              @ret_str += "|"; 
-              @ret_str += " "*@h_size
+              print "|"; print " "*@h_size
             end
           end
-          @ret_str += "|\n" 
+          print "|\n" 
             
         end
         print_cap
       end
-      @ret_str
     end
     
+    def print_cap
+      print "+"; @horizontal.times{print "-"*@h_size + "+"}; print "\n"
+    end
+    
+    
+    # def draw_grid
+#       @ret_str = ""
+#       print_cap
+#       (0...@vertical).each do |vert_index|
+#         (0..@v_size).each do |block_height|
+#           (0...@horizontal).each do |horizontal_index|
+#             if block_height == (@v_size/2)
+#               @ret_str += "|" + " "*(@h_size/2)
+#               @ret_str += "#{@contents[horizontal_index][vert_index]}|"
+#               @ret_str += " "*(@h_size/2-1)
+#             else
+#               @ret_str += "|"; 
+#               @ret_str += " "*@h_size
+#             end
+#           end
+#           @ret_str += "|\n" 
+#             
+#         end
+#         print_cap
+#       end
+#       @ret_str
+#     end
+#     
     def size
       puts "This is a #{@horizontal} by #{@vertical} grid, (x,y)=(0,0) starts at upper left"
     end
-      
-    def print_cap
-      @ret_str += "+"
-      @horizontal.times{@ret_str += ("-"*@h_size + "+")}
-      @ret_str += "\n"
-    end
-  
+#       
+#     def print_cap
+#       @ret_str += "+"
+#       @horizontal.times{@ret_str += ("-"*@h_size + "+")}
+#       @ret_str += "\n"
+#     end
+#   
   end
+  
+  
+  
+  
+  
   
   
   

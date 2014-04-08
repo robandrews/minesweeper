@@ -1,1 +1,8 @@
-<%=@grid%>
+<%b = YAML.load(@game.board) %>
+<%b.tiles.each do |row|%>
+  <div class="board-row">
+    <%row.each do |tile|%>
+      <span class="tile" data-pos="<%=tile.position%>"><%=b.display_value(tile)%></span>
+    <%end%>
+  </div>
+<%end%>
